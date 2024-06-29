@@ -8,12 +8,14 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/joho/godotenv"
+	"time"
 )
 
-func RequestToken(appkey string, appsecret string) string {
+func requestToken() {
 	client := &http.Client{}
+
+	appkey := os.Getenv("KIS_APPKEY")
+	appsecret := os.Getenv("KIS_APPSECRET")
 
 	body := []byte(fmt.Sprintf(`{
 		"appkey": "%s",
@@ -33,6 +35,7 @@ func RequestToken(appkey string, appsecret string) string {
 		log.Fatal(err)
 		os.Exit(1)
 	}
+
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
 		log.Fatal(err)
@@ -49,18 +52,20 @@ func RequestToken(appkey string, appsecret string) string {
 	token_expired := jsonRes["access_token_token_expired"].(string)
 	clear(jsonRes)
 
-	new_token_info := make(map[string]string)
-	new_token_info["TOKEN"] = token
-	new_token_info["TOKEN_EXPIRED"] = token_expired
-
-	new_token_info_str, err := godotenv.Marshal(new_token_info)
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
+	os.Setenv("KIS_TOKEN", token)
+	os.Setenv("KIS_TOKEN_EXPIRED", token_expired)
 
 	log.Println("Update .env with following new token information")
-	fmt.Printf("\n%s\n\n", new_token_info_str)
+	log.Printf("KIS_TOKEN=%s\n", token)
+	log.Printf("KIS_TOKEN_EXPIRED=%s\n", token_expired)
+}
 
-	return token
+func PrepareToken() {
+	token_expired, err := time.Parse(time.DateTime, os.Getenv("KIS_TOKEN_EXPIRED"))
+	token := os.Getenv("KIS_TOKEN")
+
+	if err != nil || time.Now().After(token_expired) || token == "" {
+		log.Println("Token is expired! Request another one!")
+		requestToken()
+	}
 }
