@@ -11,8 +11,16 @@ import (
 
 const TR_ID = "TTTS3012R"
 
-func RequestBalance(cano string, acnt_prdt_cd string, appkey string, appsecret string, token string) map[string]interface{} {
+func RequestBalance() map[string]interface{} {
+	PrepareToken()
+
 	client := &http.Client{}
+
+	cano := os.Getenv("CANO")
+	acnt_prdt_cd := os.Getenv("ACNT_PRDT_CD")
+	token := os.Getenv("KIS_TOKEN")
+	appkey := os.Getenv("KIS_APPKEY")
+	appsecret := os.Getenv("KIS_APPSECRET")
 
 	// Request balance
 	req, err := http.NewRequest("GET", "https://openapi.koreainvestment.com:9443/uapi/overseas-stock/v1/trading/inquire-balance", nil)
