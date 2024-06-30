@@ -7,26 +7,33 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
-const TR_ID = "TTTS3012R"
+const (
+	BASE_URL = "https://openapi.koreainvestment.com:9443"
+	TR_ID    = "TTTS3012R"
+)
 
-func RequestBalance() map[string]interface{} {
+func RequestBalance(accountNumber string, currency string) map[string]interface{} {
 	PrepareToken()
 
 	client := &http.Client{}
 
-	cano := os.Getenv("CANO")
-	acnt_prdt_cd := os.Getenv("ACNT_PRDT_CD")
+	accountNumberSplits := strings.Split(accountNumber, "-")
+	cano := accountNumberSplits[0]
+	acnt_prdt_cd := accountNumberSplits[1]
+
+	// secrets
 	token := os.Getenv("KIS_TOKEN")
 	appkey := os.Getenv("KIS_APPKEY")
 	appsecret := os.Getenv("KIS_APPSECRET")
 
 	// Request balance
-	req, err := http.NewRequest("GET", "https://openapi.koreainvestment.com:9443/uapi/overseas-stock/v1/trading/inquire-balance", nil)
+	req, err := http.NewRequest("GET", BASE_URL+"/uapi/overseas-stock/v1/trading/inquire-balance", nil)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return nil
 	}
 
 	req.Header.Add("Content-Type", "application/json")
@@ -38,7 +45,7 @@ func RequestBalance() map[string]interface{} {
 	q.Add("CANO", cano)
 	q.Add("ACNT_PRDT_CD", acnt_prdt_cd)
 	q.Add("OVRS_EXCG_CD", "NASD")
-	q.Add("TR_CRCY_CD", "USD")
+	q.Add("TR_CRCY_CD", currency)
 	q.Add("CTX_AREA_FK200", "")
 	q.Add("CTX_AREA_NK200", "")
 	req.URL.RawQuery = q.Encode()
@@ -46,19 +53,19 @@ func RequestBalance() map[string]interface{} {
 	res, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return nil
 	}
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return nil
 	}
 
 	var jsonRes map[string]interface{}
 	err = json.Unmarshal(data, &jsonRes)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return nil
 	}
 
 	return jsonRes

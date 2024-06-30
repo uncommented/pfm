@@ -209,3 +209,6 @@ tags
 
 # Environments
 .env
+
+# Protocol buffer
+*.pb.go

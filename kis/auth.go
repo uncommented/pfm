@@ -50,14 +50,9 @@ func requestToken() {
 
 	token := jsonRes["access_token"].(string)
 	token_expired := jsonRes["access_token_token_expired"].(string)
-	clear(jsonRes)
 
 	os.Setenv("KIS_TOKEN", token)
 	os.Setenv("KIS_TOKEN_EXPIRED", token_expired)
-
-	log.Println("Update .env with following new token information")
-	log.Printf("KIS_TOKEN=%s\n", token)
-	log.Printf("KIS_TOKEN_EXPIRED=%s\n", token_expired)
 }
 
 func PrepareToken() {
@@ -67,8 +62,8 @@ func PrepareToken() {
 		os.Exit(1)
 	}
 
-	token_expired, err := time.ParseInLocation(time.DateTime, os.Getenv("KIS_TOKEN_EXPIRED"), loc)
 	token := os.Getenv("KIS_TOKEN")
+	token_expired, err := time.ParseInLocation(time.DateTime, os.Getenv("KIS_TOKEN_EXPIRED"), loc)
 
 	if err != nil || time.Now().After(token_expired) || token == "" {
 		log.Println("Token is expired! Request another one!")

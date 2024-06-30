@@ -6,45 +6,44 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 )
 
-func RequestBalance() []map[string]interface{} {
-	client := &http.Client{}
+const UPBIT_URL = "https://api.upbit.com"
 
+func RequestBalance() []map[string]interface{} {
 	// Request balance
-	req, err := http.NewRequest("GET", "https://api.upbit.com/v1/accounts", nil)
+	req, err := http.NewRequest("GET", UPBIT_URL+"/v1/accounts", nil)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return []map[string]interface{}{}
 	}
 
 	token, err := RequestToken("")
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return []map[string]interface{}{}
 	}
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("authorization", fmt.Sprintf("Bearer %s", token))
 
+	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return []map[string]interface{}{}
 	}
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return []map[string]interface{}{}
 	}
 
 	var jsonRes []map[string]interface{}
 	err = json.Unmarshal(data, &jsonRes)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(1)
+		return []map[string]interface{}{}
 	}
-
 	return jsonRes
 }
