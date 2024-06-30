@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = "github.com/jiseongg/pfm/portfolio";
+
+package portfolio;
+
+service Portfolio {
+  rpc GetBalance (BalanceRequest) returns (stream BalanceItem) {}
+  rpc GetPerformance (BalanceRequest) returns (Performance) {}
+}
+
+message BalanceRequest {
+  string vendor = 1;
+  string account_number = 2;
+  string currency = 3;
+}
+
+message BalanceItem {
+  int64 type = 1;
+  string name = 2;
+  string ticker = 3;
+  double quantity = 4;
+  double purchasing_price = 5;
+  double current_price = 6;
+  double profit_loss_rate = 7;
+}
+
+message Performance {
+  double total_purchasing_amount = 1;
+  double total_evaluation_amount = 2;
+  double total_profit_loss = 3;
+  double total_profit_loss_rate = 4;
+}
