@@ -61,7 +61,13 @@ func requestToken() {
 }
 
 func PrepareToken() {
-	token_expired, err := time.Parse(time.DateTime, os.Getenv("KIS_TOKEN_EXPIRED"))
+	loc, err := time.LoadLocation("Asia/Seoul")
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
+	token_expired, err := time.ParseInLocation(time.DateTime, os.Getenv("KIS_TOKEN_EXPIRED"), loc)
 	token := os.Getenv("KIS_TOKEN")
 
 	if err != nil || time.Now().After(token_expired) || token == "" {
