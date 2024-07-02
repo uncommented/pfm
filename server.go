@@ -10,10 +10,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jiseongg/pfm/kis"
-	pb "github.com/jiseongg/pfm/portfolio"
-	"github.com/jiseongg/pfm/upbit"
 	"github.com/joho/godotenv"
+	"github.com/uncommented/pfm/kis"
+	pb "github.com/uncommented/pfm/portfolio"
+	"github.com/uncommented/pfm/upbit"
 	"google.golang.org/grpc"
 )
 
@@ -116,7 +116,7 @@ func newServer() *portfolioServer {
 }
 
 func main() {
-	flag.IntVar(&port, "port", 50051, "The server port")
+	flag.IntVar(&port, "port", 61000, "The server port")
 	flag.Parse()
 
 	err := godotenv.Load()
@@ -125,12 +125,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
 	pb.RegisterPortfolioServer(grpcServer, newServer())
-	grpcServer.Serve(lis)
+	_ = grpcServer.Serve(lis)
 }
