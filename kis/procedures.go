@@ -24,12 +24,10 @@ func RequestBalance(accountNumber string, currency string) map[string]interface{
 	cano := accountNumberSplits[0]
 	acnt_prdt_cd := accountNumberSplits[1]
 
-	// secrets
 	token := os.Getenv("KIS_TOKEN")
 	appkey := os.Getenv("KIS_APPKEY")
 	appsecret := os.Getenv("KIS_APPSECRET")
 
-	// Request balance
 	req, err := http.NewRequest("GET", BASE_URL+"/uapi/overseas-stock/v1/trading/inquire-balance", nil)
 	if err != nil {
 		log.Fatal(err)

@@ -22,7 +22,6 @@ type portfolioServer struct {
 }
 
 func (ps *portfolioServer) GetBalance(balanceRequest *pb.BalanceRequest, stream pb.Portfolio_GetBalanceServer) error {
-	// parse request
 	accountNumber := balanceRequest.AccountNumber
 	vendor := balanceRequest.Vendor
 	currency := balanceRequest.Currency
@@ -78,7 +77,6 @@ func (ps *portfolioServer) GetBalance(balanceRequest *pb.BalanceRequest, stream 
 }
 
 func (ps *portfolioServer) GetPerformance(ctx context.Context, balanceRequest *pb.BalanceRequest) (*pb.Performance, error) {
-	// parse request
 	AccountNumber := balanceRequest.AccountNumber
 	Vendor := balanceRequest.Vendor
 	Currency := balanceRequest.Currency
