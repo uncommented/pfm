@@ -1,4 +1,4 @@
-module github.com/jiseongg/pfm
+module github.com/uncommented/pfm
 
 go 1.22.4
 

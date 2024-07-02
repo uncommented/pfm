@@ -51,6 +51,10 @@ func requestToken() {
 	token := jsonRes["access_token"].(string)
 	token_expired := jsonRes["access_token_token_expired"].(string)
 
+	log.Println("Update token to .env for future usage")
+	log.Printf("KIS_TOKEN=%s\n", token)
+	log.Printf("KIS_TOKEN_EXPIRED=\"%s\"\n", token_expired)
+
 	os.Setenv("KIS_TOKEN", token)
 	os.Setenv("KIS_TOKEN_EXPIRED", token_expired)
 }
