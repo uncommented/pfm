@@ -11,7 +11,6 @@ import (
 const UPBIT_URL = "https://api.upbit.com"
 
 func RequestBalance() []map[string]interface{} {
-	// Request balance
 	req, err := http.NewRequest("GET", UPBIT_URL+"/v1/accounts", nil)
 	if err != nil {
 		log.Fatal(err)
