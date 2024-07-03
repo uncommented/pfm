@@ -109,11 +109,31 @@ func (ps *portfolioServer) GetPerformance(ctx context.Context, balanceRequest *p
 		}
 		return &performance, nil
 	} else {
+		balancesPerItem := upbit.RequestBalance()
+
+		totalPurchasingAmount := 0.0
+		totalEvaluationAmount := 0.0
+
+		for _, balance := range balancesPerItem {
+			quantity, _ := strconv.ParseFloat(balance["balance"].(string), 64)
+			purchasingPrice, _ := strconv.ParseFloat(balance["avg_buy_price"].(string), 64)
+			currency := balance["currency"].(string)
+			if currency == "KRW" {
+				continue
+			}
+			marketSnapshot := upbit.RequestMarketSnapshot(currency)
+			currentPrice := marketSnapshot["trade_price"].(float64)
+
+			totalPurchasingAmount += purchasingPrice * quantity
+			totalEvaluationAmount += currentPrice * quantity
+		}
+		totalProfitLoss := totalEvaluationAmount - totalPurchasingAmount
+		totalProfitLossRate := totalProfitLoss / totalPurchasingAmount
 		performance := pb.Performance{
-			TotalPurchasingAmount: 0.1,
-			TotalEvaluationAmount: 0.1,
-			TotalProfitLoss:       0.1,
-			TotalProfitLossRate:   0.1,
+			TotalPurchasingAmount: totalPurchasingAmount,
+			TotalEvaluationAmount: totalEvaluationAmount,
+			TotalProfitLoss:       totalProfitLoss,
+			TotalProfitLossRate:   totalProfitLossRate,
 		}
 		return &performance, nil
 	}
