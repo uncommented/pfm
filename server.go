@@ -53,19 +53,32 @@ func (ps *portfolioServer) GetBalance(balanceRequest *pb.BalanceRequest, stream 
 		}
 		return nil
 	} else {
-		currencyBalance := upbit.RequestBalance()
+		balancesPerItem := upbit.RequestBalance()
 
-		for _, currency := range currencyBalance {
-			quantity, _ := strconv.ParseFloat(currency["balance"].(string), 64)
-			purchasingPrice, _ := strconv.ParseFloat(currency["avg_buy_price"].(string), 64)
+		for _, balance := range balancesPerItem {
+			quantity, _ := strconv.ParseFloat(balance["balance"].(string), 64)
+			purchasingPrice, _ := strconv.ParseFloat(balance["avg_buy_price"].(string), 64)
+			currency := balance["currency"].(string)
+
+			if currency == "KRW" {
+				continue
+			}
+
+			marketSnapshot := upbit.RequestMarketSnapshot(currency)
+			currentPrice := marketSnapshot["trade_price"].(float64)
+			profitLossRate := (currentPrice - purchasingPrice) / purchasingPrice
+
+			marketInfo := upbit.RequestMarketInfo(currency)
+			name := marketInfo["english_name"].(string)
+
 			item := pb.BalanceItem{
 				Type:            999,
-				Name:            currency["currency"].(string),
-				Ticker:          currency["currency"].(string),
+				Name:            name,
+				Ticker:          currency,
 				Quantity:        quantity,
 				PurchasingPrice: purchasingPrice,
-				CurrentPrice:    0.05,
-				ProfitLossRate:  105.0,
+				CurrentPrice:    currentPrice,
+				ProfitLossRate:  profitLossRate,
 			}
 
 			if err := stream.Send(&item); err != nil {
