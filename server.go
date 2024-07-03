@@ -66,7 +66,7 @@ func (ps *portfolioServer) GetBalance(balanceRequest *pb.BalanceRequest, stream 
 
 			marketSnapshot := upbit.RequestMarketSnapshot(currency)
 			currentPrice := marketSnapshot["trade_price"].(float64)
-			profitLossRate := (currentPrice - purchasingPrice) / purchasingPrice
+			profitLossRate := (currentPrice - purchasingPrice) / purchasingPrice * 100
 
 			marketInfo := upbit.RequestMarketInfo(currency)
 			name := marketInfo["english_name"].(string)
@@ -128,7 +128,7 @@ func (ps *portfolioServer) GetPerformance(ctx context.Context, balanceRequest *p
 			totalEvaluationAmount += currentPrice * quantity
 		}
 		totalProfitLoss := totalEvaluationAmount - totalPurchasingAmount
-		totalProfitLossRate := totalProfitLoss / totalPurchasingAmount
+		totalProfitLossRate := totalProfitLoss / totalPurchasingAmount * 100
 		performance := pb.Performance{
 			TotalPurchasingAmount: totalPurchasingAmount,
 			TotalEvaluationAmount: totalEvaluationAmount,
