@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option go_package = "github.com/uncommented/pfm/kis";
+
+package kis;
+
+service KISAccount {
+  rpc ListInvestments (KISAccountRequest) returns (stream Investment);
+  rpc GetPerformance (KISAccountRequest) returns (Performance);
+}
+
+
+enum MarketCode {
+  NASD = 0;
+  NAS = 1;
+  NYSE = 2;
+  AMEX = 3;
+  SHEK = 4;
+  SHAA = 5;
+  SZAA = 6;
+  TKSE = 7;
+  HASE = 8;
+  VNSE = 9;
+}
+
+enum Currency {
+  USD = 0;
+  HKD = 1;
+  CNY = 2;
+  JPY = 3;
+  VND = 4;
+}
+
+message KISAccountRequest {
+  string account_number = 1;
+  MarketCode market_code = 2;
+  Currency currency = 3;
+}
+
+
+message Investment {
+  string security_code = 1;
+  string security_fullname = 2;
+  int32 security_type_code = 3;
+  int32 quantity = 7;
+  string average_purchasing_price = 6;
+  double purchasing_amount = 8;
+  double current_price = 10;
+  double evaluation_amount = 9;
+  double profit_loss = 4;
+  double profit_loss_rate = 5;
+}
+
+message Performance {
+  double purchasing_amount = 1;
+  double evaluation_amount = 2;
+  double profit_loss = 3;
+  double profit_loss_rate = 4;
+}
