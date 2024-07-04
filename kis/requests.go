@@ -21,7 +21,6 @@ func requestToken() {
 	client := &http.Client{}
 
 	appkey := os.Getenv("KIS_APPKEY")
-	log.Println(appkey)
 	appsecret := os.Getenv("KIS_APPSECRET")
 
 	body := []byte(fmt.Sprintf(`{
