@@ -7,7 +7,7 @@ proto: portfolio/portfolio.proto kis/kis.proto
 		$^
 
 run: proto
-	go run server.go
+	go run main.go
 
 clean:
 	rm -rf **/*.pb.go
