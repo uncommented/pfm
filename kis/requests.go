@@ -10,6 +10,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/uncommented/pfm/utils"
 )
 
 const (
@@ -18,6 +20,8 @@ const (
 )
 
 func requestToken() {
+	log.Println("Request token...")
+
 	client := &http.Client{}
 
 	appkey := os.Getenv("KIS_APPKEY")
@@ -31,30 +35,31 @@ func requestToken() {
 
 	req, err := http.NewRequest("POST", BASE_URL+"/oauth2/tokenP", bytes.NewBuffer(body))
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		log.Printf("Failed to make POST request for token: %v", err)
+		return
 	}
 
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		log.Printf("Failed to request token: %v", err)
+		return
 	}
 
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		log.Printf("Failed to read response: %v", err)
+		return
 	}
+
 	var jsonRes map[string]interface{}
 	err = json.Unmarshal(data, &jsonRes)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		log.Printf("Failed to unmarshal data to json: %v", err)
+		return
 	}
 
-	token := jsonRes["access_token"].(string)
-	token_expired := jsonRes["access_token_token_expired"].(string)
+	token := utils.UnmarshalToString(jsonRes, "access_token")
+	token_expired := utils.UnmarshalToString(jsonRes, "access_token_token_expired")
 
 	os.Setenv("KIS_TOKEN", token)
 	os.Setenv("KIS_TOKEN_EXPIRED", token_expired)
@@ -63,16 +68,23 @@ func requestToken() {
 func prepareToken() {
 	loc, err := time.LoadLocation("Asia/Seoul")
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		log.Printf("Failed to load location: %v", err)
+		return
 	}
 
 	token := os.Getenv("KIS_TOKEN")
-	token_expired, err := time.ParseInLocation(time.DateTime, os.Getenv("KIS_TOKEN_EXPIRED"), loc)
-
-	if err != nil || time.Now().After(token_expired) || token == "" {
-		log.Println("Token is expired! Request another one!")
+	if token == "" {
+		log.Println("Token is not prepared!")
 		requestToken()
+	} else {
+		token_expired, err := time.ParseInLocation(time.DateTime, os.Getenv("KIS_TOKEN_EXPIRED"), loc)
+		if err != nil {
+			log.Println("Failed to parse token expiration date!")
+			requestToken()
+		} else if time.Now().After(token_expired) {
+			log.Println("Token is expired!")
+			requestToken()
+		}
 	}
 }
 
@@ -82,6 +94,10 @@ func RequestBalance(accountNumber string, currency Currency, marketCode MarketCo
 	client := &http.Client{}
 
 	accountNumberSplits := strings.Split(accountNumber, "-")
+	if len(accountNumberSplits) != 2 {
+		log.Printf("Invalid account number format: %s", accountNumber)
+		return make(map[string]interface{})
+	}
 	cano := accountNumberSplits[0]
 	acnt_prdt_cd := accountNumberSplits[1]
 
@@ -91,8 +107,8 @@ func RequestBalance(accountNumber string, currency Currency, marketCode MarketCo
 
 	req, err := http.NewRequest("GET", BASE_URL+"/uapi/overseas-stock/v1/trading/inquire-balance", nil)
 	if err != nil {
-		log.Fatal(err)
-		return nil
+		log.Printf("Failed to make GET request: %v", err)
+		return make(map[string]interface{})
 	}
 
 	req.Header.Add("appkey", appkey)
@@ -110,21 +126,21 @@ func RequestBalance(accountNumber string, currency Currency, marketCode MarketCo
 
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
-		return nil
+		log.Printf("Failed to request: %v", err)
+		return make(map[string]interface{})
 	}
 
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
-		return nil
+		log.Printf("Failed to read response: %v", err)
+		return make(map[string]interface{})
 	}
 
 	var jsonRes map[string]interface{}
 	err = json.Unmarshal(data, &jsonRes)
 	if err != nil {
-		log.Fatal(err)
-		return nil
+		log.Printf("Failed to unmarshal data to json: %v", err)
+		return make(map[string]interface{})
 	}
 
 	return jsonRes

@@ -1,7 +1,7 @@
 package upbit
 
 import (
-	"strconv"
+	"github.com/uncommented/pfm/utils"
 )
 
 type UpbitAccountService struct {
@@ -12,21 +12,20 @@ func (ps *UpbitAccountService) ListInvestments(request *UpbitAccountRequest, str
 	investmentsResponse := RequestBalance()
 
 	for _, investment := range investmentsResponse {
-		currency := investment["currency"].(string)
-
+		currency := utils.UnmarshalToString(investment, "currency")
 		if currency == "KRW" {
 			continue
 		}
 
 		marketInfo := RequestMarketInfo(currency)
-		currency_fullname := marketInfo["english_name"].(string)
+		currency_fullname := utils.UnmarshalToString(marketInfo, "english_name")
 
-		quantity, _ := strconv.ParseFloat(investment["balance"].(string), 64)
-		averagePurchasingPrice, _ := strconv.ParseFloat(investment["avg_buy_price"].(string), 64)
+		quantity := utils.UnmarshalToFloat(investment, "balance")
+		averagePurchasingPrice := utils.UnmarshalToFloat(investment, "avg_buy_price")
 		purchasingAmount := averagePurchasingPrice * quantity
 
 		marketSnapshot := RequestMarketSnapshot(currency)
-		currentPrice, _ := marketSnapshot["trade_price"].(float64)
+		currentPrice := utils.UnmarshalToFloat(marketSnapshot, "trade_price")
 		evaluationAmount := currentPrice * quantity
 		profitLoss := evaluationAmount - purchasingAmount
 		profitLossRate := profitLoss / purchasingAmount

@@ -46,13 +46,13 @@ func requestToken(query string) (string, error) {
 func RequestBalance() []map[string]interface{} {
 	req, err := http.NewRequest("GET", UPBIT_URL+"/v1/accounts", nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to make GET request: %v", err)
 		return []map[string]interface{}{}
 	}
 
 	token, err := requestToken("")
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to request token: %v", err)
 		return []map[string]interface{}{}
 	}
 
@@ -61,19 +61,19 @@ func RequestBalance() []map[string]interface{} {
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to request: %v", err)
 		return []map[string]interface{}{}
 	}
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to read response: %v", err)
 		return []map[string]interface{}{}
 	}
 
 	var jsonRes []map[string]interface{}
 	err = json.Unmarshal(data, &jsonRes)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to unmarshal data to json: %v", err)
 		return []map[string]interface{}{}
 	}
 	return jsonRes
@@ -82,7 +82,7 @@ func RequestBalance() []map[string]interface{} {
 func RequestMarketSnapshot(ticker string) map[string]interface{} {
 	req, err := http.NewRequest("GET", UPBIT_URL+"/v1/ticker", nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to make GET request: %v", err)
 		return make(map[string]interface{})
 	}
 
@@ -94,22 +94,23 @@ func RequestMarketSnapshot(ticker string) map[string]interface{} {
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to request: %v", err)
 		return make(map[string]interface{})
 	}
 
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to read response: %v", err)
 		return make(map[string]interface{})
 	}
 
 	var jsonRes []map[string]interface{}
 	err = json.Unmarshal(data, &jsonRes)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to unmarshal data to json: %v", err)
 		return make(map[string]interface{})
 	} else if len(jsonRes) != 1 {
+		log.Println("Unexpected: more than 1 market snapshot")
 		return make(map[string]interface{})
 	}
 	return jsonRes[0]
@@ -118,7 +119,7 @@ func RequestMarketSnapshot(ticker string) map[string]interface{} {
 func RequestMarketInfo(ticker string) map[string]interface{} {
 	req, err := http.NewRequest("GET", UPBIT_URL+"/v1/market/all", nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to make GET request: %v", err)
 		return make(map[string]interface{})
 	}
 
@@ -127,20 +128,20 @@ func RequestMarketInfo(ticker string) map[string]interface{} {
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to request: %v", err)
 		return make(map[string]interface{})
 	}
 
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to read response: %v", err)
 		return make(map[string]interface{})
 	}
 
 	var jsonRes []map[string]interface{}
 	err = json.Unmarshal(data, &jsonRes)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to unmarshal data to json: %v", err)
 		return make(map[string]interface{})
 	}
 
