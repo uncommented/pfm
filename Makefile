@@ -6,11 +6,11 @@ proto: upbit/upbit.proto kis/kis.proto
 		--go-grpc_opt=require_unimplemented_servers=false \
 		$^
 
-run_server: proto
-	go run server/main.go
+server: proto
+	go build -o server/server server/server.go
 
 client: proto
 	go build -o client/client client/client.go
 
 clean:
-	rm -rf **/*.pb.go
+	rm -rf **/*.pb.go client/client server/server
