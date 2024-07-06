@@ -1,6 +1,13 @@
+# Prerequisites
 
+```
+brew install protobuf
 
-## Environment variables
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+```
+
+# Environment variables
 
 Setup environment variables with `.env` file.
 
