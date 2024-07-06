@@ -60,7 +60,7 @@ func requestToken() {
 	os.Setenv("KIS_TOKEN_EXPIRED", token_expired)
 }
 
-func PrepareToken() {
+func prepareToken() {
 	loc, err := time.LoadLocation("Asia/Seoul")
 	if err != nil {
 		log.Fatal(err)
@@ -77,7 +77,7 @@ func PrepareToken() {
 }
 
 func RequestBalance(accountNumber string, currency Currency, marketCode MarketCode) map[string]interface{} {
-	PrepareToken()
+	prepareToken()
 
 	client := &http.Client{}
 
