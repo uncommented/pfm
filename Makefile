@@ -9,5 +9,8 @@ proto: upbit/upbit.proto kis/kis.proto
 run_server: proto
 	go run server/main.go
 
+client: proto
+	go build -o client/client client/client.go
+
 clean:
 	rm -rf **/*.pb.go
