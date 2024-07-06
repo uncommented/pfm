@@ -15,7 +15,7 @@ import (
 
 const UPBIT_URL = "https://api.upbit.com"
 
-func RequestToken(query string) (string, error) {
+func requestToken(query string) (string, error) {
 	var token *jwt.Token
 
 	accesskey := os.Getenv("UPBIT_ACCESS_KEY")
@@ -50,13 +50,12 @@ func RequestBalance() []map[string]interface{} {
 		return []map[string]interface{}{}
 	}
 
-	token, err := RequestToken("")
+	token, err := requestToken("")
 	if err != nil {
 		log.Fatal(err)
 		return []map[string]interface{}{}
 	}
 
-	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("authorization", fmt.Sprintf("Bearer %s", token))
 
 	client := &http.Client{}

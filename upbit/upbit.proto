@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "github.com/uncommented/pfm/upbit";
+
+package upbit;
+
+service UpbitAccount {
+  rpc ListInvestments (UpbitAccountRequest) returns (stream Investment);
+}
+
+message UpbitAccountRequest {
+}
+
+message Investment {
+  string currency = 1;
+  string currency_fullname = 2;
+  double quantity = 3;
+  double average_purchasing_price = 4;
+  double purchasing_amount = 5;
+  double current_price = 6;
+  double evaluation_amount = 7;
+  double profit_loss = 8;
+  double profit_loss_rate = 9;
+}

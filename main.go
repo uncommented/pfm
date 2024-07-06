@@ -9,7 +9,8 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/joho/godotenv"
-	pb "github.com/uncommented/pfm/kis"
+	kis "github.com/uncommented/pfm/kis"
+	upbit "github.com/uncommented/pfm/upbit"
 )
 
 func main() {
@@ -26,7 +27,8 @@ func main() {
 	}
 	s := grpc.NewServer()
 
-	pb.RegisterKISAccountServer(s, &pb.KISAccountService{})
+	kis.RegisterKISAccountServer(s, &kis.KISAccountService{})
+	upbit.RegisterUpbitAccountServer(s, &upbit.UpbitAccountService{})
 	log.Printf("Service listening at %v", lis.Addr())
 
 	reflection.Register(s)
