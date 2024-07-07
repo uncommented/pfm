@@ -9,8 +9,8 @@ proto: upbit/upbit.proto kis/kis.proto
 server: proto
 	go build -o server/server server/server.go
 
-client: proto
-	go build -o client/client client/client.go
+backend: proto
+	go build -o backend/pfm_backend backend/backend.go
 
 clean:
-	rm -rf **/*.pb.go client/client server/server
+	rm -rf **/*.pb.go backend/pfm_backend server/server

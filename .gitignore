@@ -214,5 +214,5 @@ tags
 *.pb.go
 
 # Executable files
-client/client
+backend/pfm_backend
 server/server
