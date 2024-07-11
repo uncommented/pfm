@@ -16,24 +16,23 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var conn *grpc.ClientConn
-var upbitStub upbit.UpbitAccountClient
-var kisStub kis.KISAccountClient
-
 func getInvestments(c *gin.Context) {
+	conn, err := grpc.NewClient(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		InternalServerError(c, "Failed to connect microservice")
+	}
+	defer conn.Close()
+
 	assetType := c.Query("assetType")
 
 	var investments []Investment
 	if strings.EqualFold(assetType, "security") {
-		if kisStub == nil {
-			kisStub = kis.NewKISAccountClient(conn)
-		}
+		kisStub := kis.NewKISAccountClient(conn)
 		kisInvestmentStream, err := kisStub.ListInvestments(
 			context.Background(),
 			&kis.KISAccountRequest{
-				AccountNumber: kisAccountNumber,
-				MarketCode:    kis.MarketCode_NASD,
-				Currency:      kis.Currency_USD,
+				MarketCode: kis.MarketCode_NASD,
+				Currency:   kis.Currency_USD,
 			},
 		)
 		if err != nil {
@@ -49,7 +48,7 @@ func getInvestments(c *gin.Context) {
 				InternalServerError(c,
 					fmt.Sprintf("Failed to get investments (assetType: %s)", assetType))
 			}
-			_ = append(investments, Investment{
+			investments = append(investments, Investment{
 				ID:                     kisInvestment.SecurityCode,
 				Name:                   kisInvestment.SecurityFullname,
 				Quantity:               float64(kisInvestment.Quantity),
@@ -61,9 +60,7 @@ func getInvestments(c *gin.Context) {
 			})
 		}
 	} else if strings.EqualFold(assetType, "crypto") {
-		if upbitStub == nil {
-			upbitStub = upbit.NewUpbitAccountClient(conn)
-		}
+		upbitStub := upbit.NewUpbitAccountClient(conn)
 		upbitInvestmentStream, err := upbitStub.ListInvestments(
 			context.Background(),
 			&upbit.UpbitAccountRequest{},
@@ -81,7 +78,7 @@ func getInvestments(c *gin.Context) {
 				InternalServerError(c,
 					fmt.Sprintf("Failed to get investments (assetType: %s)", assetType))
 			}
-			_ = append(investments, Investment{
+			investments = append(investments, Investment{
 				ID:                     upbitInvestment.Currency,
 				Name:                   upbitInvestment.CurrencyFullname,
 				Quantity:               upbitInvestment.Quantity,
@@ -100,19 +97,11 @@ func getInvestments(c *gin.Context) {
 }
 
 var serverAddr string
-var kisAccountNumber string
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Llongfile)
 	flag.StringVar(&serverAddr, "server", "localhost:61000", "The address of grpc server")
-	flag.StringVar(&kisAccountNumber, "kis", "", "The account number for KIS")
 	flag.Parse()
-
-	conn, err := grpc.NewClient(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Fail to connect %s: %v", serverAddr, err)
-	}
-	defer conn.Close()
 
 	router := gin.Default()
 	router.GET("/investments", getInvestments)

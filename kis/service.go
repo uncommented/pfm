@@ -11,10 +11,9 @@ type KISAccountService struct {
 }
 
 func (ps *KISAccountService) ListInvestments(request *KISAccountRequest, stream KISAccount_ListInvestmentsServer) error {
-	accountNumber := request.AccountNumber
 	currency := request.Currency
 	marketCode := request.MarketCode
-	jsonRes := RequestBalance(accountNumber, currency, marketCode)
+	jsonRes := RequestBalance(currency, marketCode)
 
 	investmentsResponse := utils.UnmarshalToList(jsonRes, "output1")
 
@@ -52,10 +51,9 @@ func (ps *KISAccountService) ListInvestments(request *KISAccountRequest, stream 
 }
 
 func (ps *KISAccountService) GetPerformance(ctx context.Context, request *KISAccountRequest) (*KISPerformance, error) {
-	accountNumber := request.AccountNumber
 	currency := request.Currency
 	marketCode := request.MarketCode
-	jsonRes := RequestBalance(accountNumber, currency, marketCode)
+	jsonRes := RequestBalance(currency, marketCode)
 
 	performanceResponse := utils.UnmarshalToMap(jsonRes, "output2")
 	purchasingAmount := utils.UnmarshalToFloat(performanceResponse, "frcr_pchs_amt1")

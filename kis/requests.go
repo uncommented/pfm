@@ -88,11 +88,12 @@ func prepareToken() {
 	}
 }
 
-func RequestBalance(accountNumber string, currency Currency, marketCode MarketCode) map[string]interface{} {
+func RequestBalance(currency Currency, marketCode MarketCode) map[string]interface{} {
 	prepareToken()
 
 	client := &http.Client{}
 
+	accountNumber := os.Getenv("KIS_ACCOUNT_NUMBER")
 	accountNumberSplits := strings.Split(accountNumber, "-")
 	if len(accountNumberSplits) != 2 {
 		log.Printf("Invalid account number format: %s", accountNumber)

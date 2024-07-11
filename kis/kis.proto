@@ -32,7 +32,6 @@ enum Currency {
 }
 
 message KISAccountRequest {
-  string account_number = 1;
   MarketCode market_code = 2;
   Currency currency = 3;
 }
