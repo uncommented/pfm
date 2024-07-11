@@ -29,7 +29,7 @@ func (ps *UpbitAccountService) ListInvestments(request *UpbitAccountRequest, str
 		evaluationAmount := currentPrice * quantity
 		profitLoss := evaluationAmount - purchasingAmount
 		profitLossRate := profitLoss / purchasingAmount
-		item := Investment{
+		item := UpbitInvestment{
 			Currency:               currency,
 			CurrencyFullname:       currency_fullname,
 			Quantity:               quantity,

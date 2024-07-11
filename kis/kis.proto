@@ -5,8 +5,8 @@ option go_package = "github.com/uncommented/pfm/kis";
 package kis;
 
 service KISAccount {
-  rpc ListInvestments (KISAccountRequest) returns (stream Investment);
-  rpc GetPerformance (KISAccountRequest) returns (Performance);
+  rpc ListInvestments (KISAccountRequest) returns (stream KISInvestment);
+  rpc GetPerformance (KISAccountRequest) returns (KISPerformance);
 }
 
 
@@ -38,7 +38,7 @@ message KISAccountRequest {
 }
 
 
-message Investment {
+message KISInvestment {
   string security_code = 1;
   string security_fullname = 2;
   int64 security_type_code = 3;
@@ -51,7 +51,7 @@ message Investment {
   double profit_loss_rate = 10;
 }
 
-message Performance {
+message KISPerformance {
   double purchasing_amount = 1;
   double evaluation_amount = 2;
   double profit_loss = 3;

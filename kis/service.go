@@ -30,7 +30,7 @@ func (ps *KISAccountService) ListInvestments(request *KISAccountRequest, stream 
 			evaluationAmount := utils.UnmarshalToFloat(investment, "ovrs_stck_evlu_amt")
 			profitLoss := utils.UnmarshalToFloat(investment, "frcr_evlu_pfls_amt")
 			profitLossRate := utils.UnmarshalToFloat(investment, "evlu_pfls_rt")
-			item := Investment{
+			item := KISInvestment{
 				SecurityCode:           securityCode,
 				SecurityFullname:       securityFullname,
 				SecurityTypeCode:       itemType,
@@ -51,7 +51,7 @@ func (ps *KISAccountService) ListInvestments(request *KISAccountRequest, stream 
 	return nil
 }
 
-func (ps *KISAccountService) GetPerformance(ctx context.Context, request *KISAccountRequest) (*Performance, error) {
+func (ps *KISAccountService) GetPerformance(ctx context.Context, request *KISAccountRequest) (*KISPerformance, error) {
 	accountNumber := request.AccountNumber
 	currency := request.Currency
 	marketCode := request.MarketCode
@@ -62,7 +62,7 @@ func (ps *KISAccountService) GetPerformance(ctx context.Context, request *KISAcc
 	evaluationAmount := utils.UnmarshalToFloat(performanceResponse, "tot_evlu_pfls_amt")
 	profitLoss := utils.UnmarshalToFloat(performanceResponse, "ovrs_tot_pfls")
 	profitLossRate := utils.UnmarshalToFloat(performanceResponse, "tot_pftrt")
-	performance := Performance{
+	performance := KISPerformance{
 		PurchasingAmount: purchasingAmount,
 		EvaluationAmount: evaluationAmount,
 		ProfitLoss:       profitLoss,

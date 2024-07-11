@@ -5,13 +5,13 @@ option go_package = "github.com/uncommented/pfm/upbit";
 package upbit;
 
 service UpbitAccount {
-  rpc ListInvestments (UpbitAccountRequest) returns (stream Investment);
+  rpc ListInvestments (UpbitAccountRequest) returns (stream UpbitInvestment);
 }
 
 message UpbitAccountRequest {
 }
 
-message Investment {
+message UpbitInvestment {
   string currency = 1;
   string currency_fullname = 2;
   double quantity = 3;

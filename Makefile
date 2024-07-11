@@ -7,10 +7,10 @@ proto: upbit/upbit.proto kis/kis.proto
 		$^
 
 server: proto
-	go build -o server/server server/server.go
+	go build -o server/server server/*.go
 
 backend: proto
-	go build -o backend/pfm_backend backend/backend.go
+	go build -o backend/pfm_backend backend/*.go
 
 clean:
 	rm -rf **/*.pb.go backend/pfm_backend server/server
