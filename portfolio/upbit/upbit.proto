@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/uncommented/pfm/upbit";
+option go_package = "github.com/uncommented/pfm/portfolio/upbit";
 
 package upbit;
 

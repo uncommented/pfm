@@ -215,4 +215,4 @@ tags
 
 # Executable files
 backend/pfm_backend
-server/server
+portfolio/pfm_portfolio

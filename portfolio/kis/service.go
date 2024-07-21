@@ -3,7 +3,7 @@ package kis
 import (
 	context "context"
 
-	"github.com/uncommented/pfm/utils"
+	"github.com/uncommented/pfm/portfolio/utils"
 )
 
 type KISAccountService struct {
