@@ -1,7 +1,7 @@
 package upbit
 
 import (
-	"github.com/uncommented/pfm/portfolio/utils"
+	"github.com/uncommented/pfm/proto/utils"
 )
 
 type UpbitAccountService struct {

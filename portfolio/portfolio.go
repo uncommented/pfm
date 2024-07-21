@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/joho/godotenv"
-	kis "github.com/uncommented/pfm/portfolio/kis"
-	upbit "github.com/uncommented/pfm/portfolio/upbit"
+	kis "github.com/uncommented/pfm/proto/kis"
+	upbit "github.com/uncommented/pfm/proto/upbit"
 )
 
 func main() {

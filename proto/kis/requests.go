@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/uncommented/pfm/portfolio/utils"
+	"github.com/uncommented/pfm/proto/utils"
 )
 
 const (

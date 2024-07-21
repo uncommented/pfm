@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	kis "github.com/uncommented/pfm/portfolio/kis"
-	upbit "github.com/uncommented/pfm/portfolio/upbit"
+	kis "github.com/uncommented/pfm/proto/kis"
+	upbit "github.com/uncommented/pfm/proto/upbit"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
