@@ -3,13 +3,9 @@
 EC2_HOME=/home/ec2-user
 
 
-# ----------------------- Install Common Yum Packages ------------------------
-
 sudo yum update -y
 sudo yum install -y git docker
 
-
-# ------------------------ Install Docker and Compose ------------------------
 
 usermod -a -G docker ec2-user
 newgrp docker
@@ -24,5 +20,6 @@ mkdir -p $DOCKER_CONFIG/cli-plugins
 curl -SL $DOCKER_COMPOSE_URL/$DOCKER_COMPOSE_VERSION/$DOCKER_COMPOSE_ASSET \
   -o $DOCKER_CONFIG/cli-plugins/docker-compose
 chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
 
 sudo chown -R ec2-user:ec2-user $DOCKER_CONFIG
