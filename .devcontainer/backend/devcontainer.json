@@ -1,0 +1,44 @@
+{
+  "name": "PFM Backend",
+  "dockerComposeFile": "../docker-compose.yaml",
+  "service": "backend",
+  "workspaceFolder": "/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "username": "automatic",
+      "userUid": "automatic",
+      "userGid": "automatic"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "golang.go"
+      ],
+      "settings": {
+        "explorer.excludeGitIgnore": false,
+        "go.formatTool": "goimports",
+        "[json]": {
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+        "[go]": {
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        }
+      }
+    }
+  },
+  "postCreateCommand": ".devcontainer/postCreateCommand.sh",
+  "postStartCommand": ".devcontainer/postStartCommand.sh"
+}
