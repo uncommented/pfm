@@ -1,8 +1,5 @@
 version: "3.8"
 
-volumes:
-  postgres-data:
-
 services:
   frontend:
     image: mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm
@@ -14,24 +11,30 @@ services:
     restart: unless-stopped
 
   backend:
+    image: uncommented/pfm_backend:dev
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: Dockerfile
     volumes:
       - ..:/pfm:cached
     networks:
-      - pfm_network
+      pfm_network:
+        aliases:
+          - backend
+
     command: sleep infinity
     env_file:
       - postgres.env
 
-  db:
+  postgres:
     image: postgres:16.3-alpine
     restart: unless-stopped
     env_file:
       - postgres.env
     networks:
-      - pfm_network
+      pfm_network:
+        aliases:
+          - postgres
 
 networks:
   pfm_network:

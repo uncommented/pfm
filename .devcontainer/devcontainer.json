@@ -1,7 +1,7 @@
 {
-  "name": "PFM Backend",
-  "dockerComposeFile": "../docker-compose.yaml",
-  "service": "backend",
+  "name": "PFM Frontend",
+  "dockerComposeFile": "docker-compose.yaml",
+  "service": "frontend",
   "workspaceFolder": "/${localWorkspaceFolderBasename}",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
@@ -19,22 +19,12 @@
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode",
-        "golang.go"
+        "dbaeumer.vscode-eslint"
       ],
       "settings": {
         "explorer.excludeGitIgnore": false,
-        "go.formatTool": "goimports",
-        "[json]": {
-          "editor.formatOnSave": true,
-          "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
-          }
-        },
-        "[go]": {
-          "editor.formatOnSave": true,
-          "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
-          }
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "always"
         }
       }
     }
