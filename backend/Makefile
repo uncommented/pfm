@@ -9,10 +9,10 @@ proto: proto/upbit/upbit.proto proto/kis/kis.proto
 		$^
 
 portfolio: proto
-	go build -o portfolio/pfm_portfolio portfolio/*.go
+	go build -o portfolio/main portfolio/*.go
 
 advisor: proto $(wildcard advisor/*.go)
-	go build -o pfm_backend advisor/*.go
+	go build -o advisor/main advisor/*.go
 
 clean:
-	rm -rf proto/**/*.pb.go advisor/pfm_backend portfolio/pfm_portfolio
+	rm -rf proto/**/*.pb.go advisor/main portfolio/main

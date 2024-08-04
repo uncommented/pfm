@@ -385,5 +385,4 @@ tags
 *.pb.go
 
 # Executable files
-backend/pfm_backend
-portfolio/pfm_portfolio
+main
