@@ -1,9 +1,9 @@
-package kis
+package api
 
 import (
 	context "context"
 
-	"github.com/uncommented/pfm/proto/utils"
+	"github.com/uncommented/pfm/utils"
 )
 
 type KISAccountService struct {

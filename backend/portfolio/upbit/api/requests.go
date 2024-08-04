@@ -1,4 +1,4 @@
-package upbit
+package api
 
 import (
 	"crypto/sha512"

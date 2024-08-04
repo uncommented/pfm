@@ -1,4 +1,4 @@
-package kis
+package api
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/uncommented/pfm/proto/utils"
+	"github.com/uncommented/pfm/utils"
 )
 
 const (

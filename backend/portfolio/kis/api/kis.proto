@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/uncommented/pfm/kis";
+option go_package = "github.com/uncommented/pfm/portfolio/kis/api";
 
-package kis;
+package api;
 
 service KISAccount {
   rpc ListInvestments (KISAccountRequest) returns (stream KISInvestment);

@@ -2,7 +2,8 @@
 
 all: portfolio advisor
 
-proto: proto/upbit/upbit.proto proto/kis/kis.proto
+PROTOS := $(shell find . -name "*.proto")
+proto: $(PROTOS)
 	protoc --go_opt=paths=source_relative --go_out=. \
 		--go-grpc_opt=paths=source_relative --go-grpc_out=. \
 		--go-grpc_opt=require_unimplemented_servers=false \
