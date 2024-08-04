@@ -1,6 +1,6 @@
 .PHONY: proto
 
-all: backend portfolio
+all: portfolio advisor
 
 proto: proto/upbit/upbit.proto proto/kis/kis.proto
 	protoc --go_opt=paths=source_relative --go_out=. \
@@ -11,8 +11,8 @@ proto: proto/upbit/upbit.proto proto/kis/kis.proto
 portfolio: proto
 	go build -o portfolio/pfm_portfolio portfolio/*.go
 
-backend: proto
-	go build -o backend/pfm_backend backend/*.go
+advisor: proto $(wildcard advisor/*.go)
+	go build -o pfm_backend advisor/*.go
 
 clean:
-	rm -rf proto/**/*.pb.go backend/pfm_backend portfolio/pfm_portfolio
+	rm -rf proto/**/*.pb.go advisor/pfm_backend portfolio/pfm_portfolio

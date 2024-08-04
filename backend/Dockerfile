@@ -16,11 +16,9 @@ RUN curl -LO $PB_REL/download/v$PB_VERSION/protoc-$PB_VERSION-linux-$arch.zip &&
 ENV PATH /proto/bin:$PATH
 
 WORKDIR /pfm
-ARG target
 COPY go.mod go.mod
 COPY go.sum go.sum
 COPY Makefile Makefile
 COPY proto proto
-COPY $target $target
-
-RUN make $target
+COPY portfolio portfolio
+COPY *.go .

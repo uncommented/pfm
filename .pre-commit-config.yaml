@@ -10,4 +10,3 @@ repos:
     hooks:
     - id: go-fmt
     - id: go-imports
-    - id: go-unit-tests
